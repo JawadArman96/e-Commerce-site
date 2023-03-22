@@ -11,3 +11,7 @@ def item_list(request):
 
 def check_out(request):
     return render(request, "checkout-page.html")
+
+
+def products(request):
+    return render(request, "product-page.html")
