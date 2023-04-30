@@ -51,6 +51,20 @@
                 height: 100vh;
               }
             }
+            .nav-link {
+            color: green;
+            }
+
+            .nav-item>active>a:hover {
+                background-color: blue;
+                color: green;
+            }
+
+            /*code to change background color*/
+            .navbar-nav>.active>a {
+                background-color: #0b51c5;
+                color: green;
+            }
 
           </style>
 </head>
@@ -103,7 +117,7 @@
                 </ul>
 
                 <!-- Right -->
-                <ul class="navbar-nav nav-flex-icons">
+                <ul class="navbar-nav active">
                   {% if request.user.is_authenticated %}
                     <li class="nav-item">
                       <a class="nav-link waves-effect">
@@ -112,10 +126,22 @@
                         <span class="clearfix d-none d-sm-inline-block"> Cart </span>
                       </a>
                     </li>
+                    <li class="nav-item">
+                      <a class="nav-link waves-effect" href="{% url 'account_logout' %}">
+                        <span class="clearfix d-none d-sm-inline-block"> Logout </span>
+                      </a>
+                    </li>
                   {% else %}
                     <li class="nav-item">
-                      <a class="nav-link waves-effect" href="{% url 'account_login' %}">
-                        <span class="clearfix d-none d-sm-inline-block"> Login </span>
+                      <a class="nav-link waves-effect" href="{% url 'account_login' %}"> Login
+<!--                        <span class="clearfix d-none d-sm-inline-block"> Login </span>-->
+                        <span class="sr-only">(current)</span>
+                      </a>
+                    </li>
+                    <li class="nav-item" >
+                      <a class="nav-link waves-effect" href="{% url 'account_signup' %}"> Signup
+<!--                        <span class="clearfix d-none d-sm-inline-block"> Signup </span>-->
+                        <span class="sr-only" >(current)</span>
                       </a>
                     </li>
                   {% endif %}
