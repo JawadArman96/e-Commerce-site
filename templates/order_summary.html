@@ -30,7 +30,28 @@
                 {% endif %}
               </td>
           </tr>
+      {% empty %}
+      <tr>
+          <td colspan="5"> Your Cart is Empty</td>
+      </tr>
+      <tr>
+          <td colspan="5">
+              <a class="btn btn-primary float-right" href="/">Continue shopping</a>
+          </td>
+      </tr>
       {% endfor %}
+      {% if object.get_total_price %}
+      <tr>
+          <td colspan="4"> <b> Order Total </b> </td>
+          <td colspan="4"> <b> ${{ object.get_total_price }} </b> </td>
+      </tr>
+      <tr>
+          <td colspan="5">
+              <a class="btn btn-purple float-right ml-2" href="/checkout/">Proceed to payment</a>
+              <a class="btn btn-primary float-right" href="/">Continue shopping</a>
+          </td>
+      </tr>
+      {% endif %}
     </tbody>
   </table>
 </div>
