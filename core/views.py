@@ -6,6 +6,7 @@ from .models import Item, OrderItem, Order
 from django.views.generic import ListView, DetailView, View
 from django.utils import timezone
 from django.contrib import messages
+from .forms import CheckoutForm
 
 
 class HomeView(ListView):
@@ -33,8 +34,19 @@ class OrderSummaryView(LoginRequiredMixin, View):
             return redirect("/")
 
 
-def check_out(request):
-    return render(request, "checkout-page.html")
+class CheckoutView(View):
+    def get(self, *args, **kwargs):
+        form = CheckoutForm()
+        context = {
+            'form': form
+        }
+        return render(self.request, "checkout-page.html")
+
+    def post(self, *args, **kwargs):
+        form = CheckoutForm(self.request.POST or None)
+        if form.is_valid():
+            print("The form is valid")
+            return redirect('core:checkout')
 
 
 @login_required
