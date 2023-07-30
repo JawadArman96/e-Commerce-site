@@ -47,7 +47,7 @@ class CheckoutView(View):
         try:
             order = Order.objects.get(user=self.request.user, ordered=False)
             if form.is_valid():
-                street_address = form.cleaned_date.get('street_address')
+                street_address = form.cleaned_data.get('street_address')
                 apartment_address = form.cleaned_data.get('apartment_address')
                 country = form.cleaned_data.get('country')
                 zip = form.cleaned_data.get('zip')
@@ -64,9 +64,9 @@ class CheckoutView(View):
                 billing_address.save()
                 order.billing_address = billing_address
                 order.save()
-                return redirect('core:checkout')
+                return redirect('core:check_out')
             messages.info(self.request, "Failed checkout")
-            return redirect('core:checkout')
+            return redirect('core:check_out')
         except ObjectDoesNotExist:
             messages.error(self.request, 'You do not have active order')
             return render(self.request, 'order_summary.html')
