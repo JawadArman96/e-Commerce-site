@@ -64,12 +64,25 @@ class CheckoutView(View):
                 billing_address.save()
                 order.billing_address = billing_address
                 order.save()
-                return redirect('core:check_out')
-            messages.info(self.request, "Failed checkout")
-            return redirect('core:check_out')
+                payment_option = form.cleaned_data.get('payment_option')
+                print("payment_option: "+payment_option)
+                if payment_option == "Stripe":
+                    return redirect('core:payment', payment_option='stripe')
+                elif payment_option == "Paypal":
+                    return redirect('core:payment', payment_option='paypal')  # redirect('core:check_out')
+                else:
+                    messages.warning(
+                        self.request, "Invalid payment option selected")
+                    return redirect('core:checkout')
+            return redirect('core:payment')  # redirect('core:check_out')
         except ObjectDoesNotExist:
             messages.error(self.request, 'You do not have active order')
             return render(self.request, 'order_summary.html')
+
+
+class PaymentView(View):
+    def get(self, *args, **kwargs):
+        return render(self.request, "payment.html")
 
 
 @login_required
@@ -145,9 +158,12 @@ def remove_single_item_from_cart(request, slug):
                 user=request.user,
                 ordered=False
             )[0]
-            if order_item.quantity > 1:
+            if order_item.quantity > 0:
                 order_item.quantity -= 1
                 order_item.save()
+                if order_item.quantity == 0:
+                    order.items.remove(order_item)
+                    order_item.delete()
             else:
                 order.items.remove(order_item)
             messages.info(request, "This item quantity was updated")
